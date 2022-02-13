@@ -46,8 +46,19 @@ class MainActivity : AppCompatActivity() {
         binding.cab.setOnClickListener {
             appsFlyer.logEvent(
                 applicationContext,
-                AFInAppEventType.PURCHASE, eventValues)
-
+                AFInAppEventType.PURCHASE,
+                eventValues,
+                object : AppsFlyerRequestListener {
+                    override fun onSuccess() {
+                        Log.d(LOG_TAG, "Purchase event sent successfully")
+                    }
+                    override fun onError(errorCode: Int, errorDesc: String) {
+                        Log.d(LOG_TAG, "Event failed to be sent:\n" +
+                                "Error code: " + errorCode + "\n"
+                                + "Error description: " + errorDesc)
+                    }
+                }
+            )
         }
         appsFlyer.setDebugLog(true)
         appsFlyer.setMinTimeBetweenSessions(0)
