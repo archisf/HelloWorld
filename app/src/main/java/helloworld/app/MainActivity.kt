@@ -13,7 +13,7 @@ import android.view.MenuItem
 import com.appsflyer.AFInAppEventParameterName
 import com.appsflyer.AFInAppEventType
 import helloworld.app.databinding.ActivityMainBinding
-import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.AppsFlyerLib
 import com.appsflyer.attribution.AppsFlyerRequestListener
 
 class MainActivity : AppCompatActivity() {
@@ -24,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val appsFlyer = AppsFlyerLib.getInstance()
+        val eventValues = HashMap<String, Any>()
+        eventValues.put(AFInAppEventParameterName.CONTENT_ID, 12345)
+        eventValues.put(AFInAppEventParameterName.CONTENT_TYPE, "555")
+        eventValues.put(AFInAppEventParameterName.REVENUE, 50)
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -39,11 +44,6 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
         binding.cab.setOnClickListener {
-            val eventValues = HashMap<String, Any>()
-            eventValues.put(AFInAppEventParameterName.CONTENT_ID, 12345)
-            eventValues.put(AFInAppEventParameterName.CONTENT_TYPE, "555")
-            eventValues.put(AFInAppEventParameterName.REVENUE, 200)
-
             appsFlyer.logEvent(
                 applicationContext,
                 AFInAppEventType.PURCHASE, eventValues)
