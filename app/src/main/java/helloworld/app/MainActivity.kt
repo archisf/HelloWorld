@@ -63,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         appsFlyer.setDebugLog(true)
         appsFlyer.setMinTimeBetweenSessions(0)
         appsFlyer.init("g3HjiTFQSYkkNWGWDQazxL", null, this)
+        appsFlyer.setCustomerUserId("12345");
 
         appsFlyer.start(this, "g3HjiTFQSYkkNWGWDQazxL", object :
             AppsFlyerRequestListener {
