@@ -1,6 +1,7 @@
 package helloworld.app
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,14 +11,36 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import helloworld.app.databinding.ActivityMainBinding
+import com.appsflyer.AppsFlyerLib;
+import com.appsflyer.attribution.AppsFlyerRequestListener
 
 class MainActivity : AppCompatActivity() {
-
+    val LOG_TAG = "AppsFlyerOneLinkSimApp"
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val appsFlyer = AppsFlyerLib.getInstance()
+        appsFlyer.setDebugLog(true)
+        appsFlyer.setMinTimeBetweenSessions(0)
+
+        appsFlyer.init("g3HjiTFQSYkkNWGWDQazxL", null, this)
+
+        appsFlyer.start(this, "g3HjiTFQSYkkNWGWDQazxL", object :
+            AppsFlyerRequestListener {
+            override fun onSuccess() {
+                Log.d(LOG_TAG, "Launch sent successfully!")
+            }
+
+            override fun onError(errorCode: Int, errorDesc: String) {
+                Log.d(LOG_TAG, "Launch failed to be sent:\n" +
+                        "Error code: " + errorCode + "\n"
+                        + "Error description: " + errorDesc)
+            }
+        })
+
+
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
