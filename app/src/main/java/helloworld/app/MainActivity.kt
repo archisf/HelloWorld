@@ -10,6 +10,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.appsflyer.AFInAppEventParameterName
+import com.appsflyer.AFInAppEventType
 import helloworld.app.databinding.ActivityMainBinding
 import com.appsflyer.AppsFlyerLib;
 import com.appsflyer.attribution.AppsFlyerRequestListener
@@ -22,9 +24,33 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val appsFlyer = AppsFlyerLib.getInstance()
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        setSupportActionBar(binding.toolbar)
+
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+        setupActionBarWithNavController(navController, appBarConfiguration)
+
+        binding.fab.setOnClickListener { view ->
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+        binding.cab.setOnClickListener {
+            val eventValues = HashMap<String, Any>()
+            eventValues.put(AFInAppEventParameterName.CONTENT_ID, 12345)
+            eventValues.put(AFInAppEventParameterName.CONTENT_TYPE, "555")
+            eventValues.put(AFInAppEventParameterName.REVENUE, 200)
+
+            appsFlyer.logEvent(
+                applicationContext,
+                AFInAppEventType.PURCHASE, eventValues)
+
+        }
         appsFlyer.setDebugLog(true)
         appsFlyer.setMinTimeBetweenSessions(0)
-
         appsFlyer.init("g3HjiTFQSYkkNWGWDQazxL", null, this)
 
         appsFlyer.start(this, "g3HjiTFQSYkkNWGWDQazxL", object :
@@ -40,21 +66,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
-
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
